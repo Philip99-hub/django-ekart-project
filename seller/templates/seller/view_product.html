@@ -1,0 +1,48 @@
+{% extends 'seller/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<main class="col-md-9">
+   <h1>My products</h1>
+   <div class="container-fluid">
+      <div class="row">
+
+         <div class="card col-md-4 d-inline-block">
+            <img src="{% static 'images/1.jpg' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5>DGI-906163</h5>
+              <h5>Avilable stock : 20</h5>
+            </div>
+          </div>
+
+          <div class="card col-md-4 d-inline-block">
+            <img src="{% static 'images/2.jpg' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+               <h5>DGI-906161</h5>
+               <h5>Avilable stock : 30</h5>
+            </div>
+          </div>
+
+          <div class="card col-md-4 d-inline-block">
+            <img src="{% static 'images/3.jpg' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+               <h5>DGI-906162</h5>
+               <h5>Avilable stock : 10</h5>
+            </div>
+          </div>
+
+          <div class="card col-md-4 d-inline-block">
+            <img src="{% static 'images/4.jpg' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+               <h5>DGI-906164</h5>
+               <h5>Avilable stock : 40</h5>
+            </div>
+          </div>
+      </div>
+   </div>
+</main>
+
+
+{% endblock %}

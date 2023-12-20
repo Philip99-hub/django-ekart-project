@@ -1,0 +1,40 @@
+{% extends 'ekart_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+<main class="col-md-9">
+  <article class="card">
+      <header class="card-header">
+          <strong class="d-inline-block mr-3">Welcome</strong>
+          <span>Admin</span>
+      </header>
+     <div class="flex-container">
+      <div class="flex-card" style="width: 18rem;">
+          <div class="card-body">
+            <h3 class="card-title">Sellers</h3>
+            <div class="number" >
+              <b>47</b>
+            </div>                          
+            <a href="#" class="btn btn-info">view seller</a>
+            
+          </div>
+        </div>
+        <div class="flex-card" style="width: 18rem;">
+          <div class="card-body">
+            <h3 class="card-title">Customers</h3>
+            <div class="number" >
+              <b>187654</b>
+            </div>                          
+            <a href="#" class="btn btn-info">view customers</a>
+            
+          </div>
+        </div>
+     </div>
+    
+     
+  </article> <!-- order-group.// -->
+</main>
+{% endblock %}

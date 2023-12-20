@@ -1,0 +1,40 @@
+{% extends 'customer/base.html' %}
+
+{% block content %}
+ 
+<section class="section-conten padding-y" style="min-height:84vh">
+
+  
+        <div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
+          <div class="card-body">
+          <h4 class="card-title mb-4">Seller Sign in</h4>
+          <form method = "POST" >
+            {% csrf_token %}
+              <div class="form-group">
+                 <input type="text" class="form-control" name="seller_id" placeholder="Seller Id" >
+              </div> 
+              <div class="form-group">
+                <input type="password" class="form-control" name="password" placeholder="Password" >
+              </div> 
+              
+              <div class="form-group">
+                  <a href="{% url 'customer:forgot_password_seller' %}" class="float-right">Forgot password?</a> 
+               
+              </div> 
+              <div class="form-group">
+                 
+                  <button type="submit" class="btn btn-primary btn-block">Login</button>
+              </div> 
+          </form>
+          </div>  
+        </div> 
+    
+         <p class="text-center mt-4">Don't have account? <a href="{% url 'customer:seller_register' %}">Sign up</a></p>
+         <br><br>
+    
+    
+    </section> 
+    
+    
+
+{% endblock%}

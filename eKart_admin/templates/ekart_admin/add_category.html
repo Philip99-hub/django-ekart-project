@@ -1,0 +1,57 @@
+{% extends 'ekart_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+<main class="col-md-9">
+
+    <section class="section-content padding-y">
+
+        <div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+            <article class="card-body">
+                <header class="mb-4">
+                    <h4 class="card-title">Add Category</h4>
+                </header>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class=" form-group">
+                        <label>Category name</label>
+                        <input type="text" class="form-control" name="category_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+
+                        <textarea name="description" id="" cols="30" rows="10" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Pic</label>
+
+                        <input type="file" class="form-control" name="cover_pic">
+
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block"> Add Category </button>
+                    </div>
+                </form>
+            </article>
+        </div>
+
+        <br><br>
+
+    </section>
+
+</main>
+
+{% if message %}
+<script>
+    swal.fire('{{message}}')
+</script>
+{% endif %}
+
+
+
+{% endblock %}

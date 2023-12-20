@@ -1,0 +1,52 @@
+{% extends 'seller/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+  
+<main class="col-md-9">
+    <!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-content padding-y">
+
+        <!-- ============================ COMPONENT REGISTER   ================================= -->
+        <div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+            <article class="card-body">
+                <header class="mb-4">
+                    <h4 class="card-title">Add Category</h4>
+                </header>
+                <form action="" method="" enctype="multipart/form-data">
+                    
+                    <div class=" form-group">
+                        <label>Category name</label>
+                        <input type="text" class="form-control" name="category_name">
+                    </div> <!-- form-group end.// -->
+                    <div class="form-group">
+                        <label>Description</label>
+                        
+                        <textarea name="description" id="" cols="30" rows="10"  class="form-control"></textarea>
+                    </div> <!-- form-group end.// -->             
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block"> Add Category </button>
+                    </div> <!-- form-group// -->
+
+                </form>
+            </article><!-- card-body.// -->
+        </div> <!-- card .// -->
+        
+        <br><br>
+        <!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+
+
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+</main>
+
+
+
+
+
+{% endblock %}

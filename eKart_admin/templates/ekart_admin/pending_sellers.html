@@ -1,0 +1,53 @@
+{% extends 'ekart_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<main class="col-md-9">
+   <h1>Pending Sellers</h1>
+
+   <table class="table table-primary">
+
+      <tr>
+         <td>Slno</td>
+         <td>Pic</td>
+         <td>Seller Name</td>
+         <td>Email</td>
+         <td>Company Name</td>
+         <td>City</td>
+         <td>Country</td>
+      </tr>
+
+      {% for seller in list %}
+
+      <tr>
+         <td>{{ forloop.counter }}</td>
+         
+         <td><img src="{{ seller.pic.url }}" height="50px" width="50px" alt="" srcset=""></td>
+         <td>{{ seller.first_name }} {{ seller.last_name }}</td>
+         <td>{{ seller.email }}</td>
+         <td>{{ seller.company_name }}</td>
+         <td>{{ seller.city }}</td>
+         <td>{{ seller.country }}</td>
+
+         <td><a href="{% url 'ekart_admin:approve_seller' seller.id %}" class = "btn btn-success">Approve</a></td>
+         <td><a href="" class = "btn btn-danger">Reject</a></td>
+
+
+
+
+
+
+      </tr>
+
+
+      {% endfor %}
+
+
+
+   </table>
+</main>
+
+
+{% endblock %}

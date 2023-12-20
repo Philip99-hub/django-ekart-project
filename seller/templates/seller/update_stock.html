@@ -1,0 +1,61 @@
+{% extends 'seller/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<main class="col-md-9">
+    <!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-content padding-y">
+
+        <!-- ============================ COMPONENT REGISTER   ================================= -->
+        <div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+            <article class="card-body">
+                <header class="mb-4">
+                    <h4 class="card-title">update_stock</h4>
+                </header>
+                <form action="" method="" enctype="multipart/form-data">
+
+                    <div class=" form-group">
+                        <label>Enter product No</label>
+                        <input type="text" class="form-control" name="product_name">
+                    </div> <!-- form-group end.// -->
+                    <div class=" form-group">
+                        <label>Product name</label>
+                        <input type="text" class="form-control" name="product_name">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Avilable stock</label>
+                            <input type="number" class="form-control" name="stock">
+                        </div> <!-- form-group end.// -->
+                    </div> <!-- form-row.// -->  
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>New stock</label>
+                            <input type="number" class="form-control" name="stock">
+                        </div> <!-- form-group end.// -->
+                    </div> <!-- form-row.// --> 
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block"> Update </button>
+                    </div> <!-- form-group// -->
+
+                </form>
+            </article><!-- card-body.// -->
+        </div> <!-- card .// -->
+        
+        <br><br>
+        <!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+
+
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+</main>
+
+
+{% endblock %}
