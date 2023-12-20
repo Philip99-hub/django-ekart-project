@@ -9,18 +9,21 @@
     <section class="section-content padding-y">
 
         <!-- ============================ COMPONENT REGISTER   ================================= -->
-        <div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+        <div class="card mx-auto" style="max-width:520px; margin-top:3px;">
             <article class="card-body">
                 <header class="mb-4">
                     <h4 class="card-title">Add Product</h4>
                 </header>
-                <form action="" method="" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data">
 
+                    {% csrf_token %}
                     <div class=" form-group">
                         <label>Product Category</label>
-                        <select class="form-control" name="" id="">
-                            <option value="">Electronics</option>
-                            <option value="">Men's Wear</option>
+                        <select class="form-control" name="category" id="">
+                            {% for item in category %}
+                            <option value="{{ item.id }}">{{ item.category }}</option>
+                           
+                            {% endfor %}
                         </select>
                     </div> <!-- form-group end.// -->
                     <div class=" form-group">
@@ -28,8 +31,8 @@
                         <input type="text" class="form-control" name="product_name">
                     </div> <!-- form-group end.// -->
                     <div class=" form-group">
-                        <label>Product No</label>
-                        <input type="text" class="form-control" name="product_name">
+                        <label>Product Code</label>
+                        <input type="text" class="form-control" name="product_code">
                     </div>
                     <div class="form-group">
                         <label>Description</label>
@@ -49,7 +52,7 @@
                             <input type="text" class="form-control" name="price">
                         </div> <!-- form-group end.// -->
                         <div class="form-group col-md-6">
-                            <label>Image</label>
+                            <label>Upload Image</label>
                             <input type="file" class="form-control" name="image">
                         </div> <!-- form-group end.// -->
                     </div> <!-- form-row.// -->
@@ -58,18 +61,19 @@
                         <button type="submit" class="btn btn-primary btn-block"> Add product </button>
                     </div> <!-- form-group// -->
 
+                    {% if message %}
+                   <script>
+                          Swal.fire('{{ message }}')
+                   </script>
+                   {% endif %}
                 </form>
             </article><!-- card-body.// -->
         </div> <!-- card .// -->
         
-        <br><br>
-        <!-- ============================ COMPONENT REGISTER  END.// ================================= -->
-
+        <br><br> 
 
     </section>
-    <!-- ========================= SECTION CONTENT END// ========================= -->
-
-
+  
 </main>
 
 

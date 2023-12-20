@@ -59,7 +59,7 @@ def approve_seller(request,id):
     subject = 'username and temporary password'
     message = 'Hi! your Ekart account has been approved, your seller id is ' + str(seller_id) + ' and temporary password is ' + str(temporary_password)
     from_email = settings.EMAIL_HOST_USER
-    recipient_list = ['sunnyashiosh232@gmail.com',]
+    recipient_list = ['sunnyashish232@gmail.com',]
 
     send_mail(
         subject = subject,
