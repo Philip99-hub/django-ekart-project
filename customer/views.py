@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import Customer
-from seller.models import Seller
+from seller.models import Seller,Product
+from django.db.models import Q
  
 # Create your views here.
 
@@ -10,10 +11,35 @@ def customer_home(request):
 
 
 def store(request):
-    return render(request, 'customer/store.html')
+    query = request.GET.get('query')
+
+    if query == 'all':
+        products = Product.objects.all()
+     
+    else:
+         
+        products = Product.objects.filter(category = query)
 
 
-def product_detail(request):
+    if  'search_text' in request.GET:
+        search_text = request.GET.get('search_text')
+        products = Product.objects.filter(Q(category__category__icontains = search_text) | Q(product_name__icontains = search_text))
+    count = products.count()    
+    context = {
+        'products': products,
+        'product_count': count
+    }
+
+    return render(request, 'customer/store.html',context)
+
+
+def product_detail(request,product_id):
+    product = Product.objects.get(id = product_id)
+
+    context = {
+        'product': product,
+    }
+
     return render(request, 'customer/product_detail.html')
 
 
