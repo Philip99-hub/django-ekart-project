@@ -1,13 +1,15 @@
-from django.shortcuts import render,redirect
-from .models import Customer
+from django.shortcuts import render,redirect,reverse
+from .models import Customer,Cart
 from seller.models import Seller,Product
-from django.db.models import Q
- 
+from django.db.models import Q,F
+from django.shortcuts import get_object_or_404   
+from django.http import JsonResponse
 # Create your views here.
 
 
 def customer_home(request):
-    return render(request, 'customer/customer_home.html')
+    products=Product.objects.all()
+    return render(request, 'customer/customer_home.html',{'products':products})
 
 
 def store(request):
@@ -35,16 +37,96 @@ def store(request):
 
 def product_detail(request,product_id):
     product = Product.objects.get(id = product_id)
+    customer = Customer.objects.get(id = request.session['customer'])
+
+    try:
+        cart_item = get_object_or_404(Cart, customer = customer,product = product_id)
+        item_exist = True 
+
+    except Exception as e:
+         
+        item_exist = False
+
+    # cart_item = get_object_or_404(Cart, customer = customer,product = product_id)
+    # if cart_item:
+    #     item_exist=True
+    # else:
+    #     item_exist=False
+
+    if request.method == 'POST':
+        if 'customer' in request.session:
+            cart = Cart(customer = customer, product = product, price = product.price)
+            cart.save()
+            return redirect('customer:cart',current_view = 'list')
+        
+        else:
+            target_url = reverse('customer:customer_login')
+             
+            redirect_url =  target_url + '?pid=' + str(product_id)
+            return redirect(redirect_url)
 
     context = {
         'product': product,
+        'item_exist':item_exist
     }
 
-    return render(request, 'customer/product_detail.html')
+    return render(request, 'customer/product_detail.html',context)
 
 
-def cart(request):
-    return render(request, 'customer/cart.html')
+def cart(request, current_view):
+
+    if 'customer' in request.session:
+        print('*********')
+        cart_items = Cart.objects.filter(customer = request.session['customer'])
+        grand_total = 0
+        customer = request.session['customer']
+        disable_checkout = ''
+        cart = Cart.objects.filter(customer = request.session['customer']).annotate(grand_total = F('quantity') * F('product__price') )
+        
+        for item in cart:
+            grand_total += item.grand_total
+        
+
+        if not cart_items:
+            disable_checkout = 'disabled'
+        for item in cart_items:
+        
+            
+            if item.product.stock == 0:
+                disable_checkout = 'disabled'
+                print(item.product.product_name,'not available')
+
+        
+        context = {
+            'cart_items': cart_items, 
+            'disable_checkout': disable_checkout, 
+            'grand_total': grand_total,
+            'total_items': cart_items.count(),
+            
+            }    
+            
+        
+   
+    return render(request, 'customer/cart.html',context)
+
+def update_cart(request):
+     
+    product_id = request.POST['id']
+    qty = request.POST['qty']
+    print(qty)
+    grand_total = 0
+    cart = Cart.objects.get( customer = request.session['customer'],product = product_id)
+    cart.quantity = qty
+    cart.save()
+
+    cart = Cart.objects.filter(customer = request.session['customer']).annotate(grand_total = F('quantity') * F('product__price') )
+    
+    for item in cart:
+        grand_total += item.grand_total
+    
+    # item_price = cart.product.price
+    return JsonResponse({'status': 'Quantity updated', 'grand_total': grand_total})
+
 
 
 def place_order(request):
@@ -148,7 +230,28 @@ def customer_signup(request):
 
 
 def customer_login(request):
-    return render(request, 'customer/customer_login.html')
+    message = ''
+
+    if request.method == 'POST':
+
+
+        email = request.POST['email']
+        password = request.POST['password']
+
+        customer = Customer.objects.filter(email = email, password = password)
+
+        if customer.exists():
+            request.session['customer'] = customer[0].id
+            request.session['customer_name'] = customer[0].first_name
+
+            if request.GET.get('pid'):
+                return redirect('customer:product_detail',request.GET.get('pid'))
+
+            return redirect('customer:customer_home')
+        else:
+            message = 'Username or Password Incorrect'
+
+    return render(request, 'customer/customer_login.html', {'message': message,})
 
 
 def forgot_password_customer(request):

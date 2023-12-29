@@ -20,13 +20,14 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for item in cart_items %}
                             <tr>
                                 <td>
                                     <figure class="itemside align-items-center">
-                                        <div class="aside"><img src="{% static './images/items/11.jpg' %}" class="img-sm"></div>
+                                        <div class="aside"><img src="{{item.product.image.url}}" class="img-sm"></div>
                                         <figcaption class="info">
-                                            <a href="#" class="title text-dark">Camera Canon EOS M50 Kit</a>
-                                            <p class="text-muted small">Matrix: 25 Mpx <br> Brand: Canon</p>
+                                            <a href="#" class="title text-dark">{{item.product.product_name}}</a>
+                                            <p class="text-muted small">{{item.product.description}}</p>
                                         </figcaption>
                                     </figure>
                                 </td>
@@ -35,99 +36,40 @@
                                     <div class="col">
                                         <div class="input-group input-spinner">
                                             <div class="input-group-prepend">
-                                                <button class="btn btn-light" type="button" id="button-plus"> <i
-                                                        class="fa fa-minus"></i> </button>
+                                                <button class="btn btn-light update-cart"
+                                                    data-txtQty="product_qty{{ item.product.id }}"
+                                                    data-itemStock="{{ item.product.stock }}" data-btnType="decrement"
+                                                    data-product_id="{{ item.product.id }}" type="button"> <i
+                                                        class="fa fa-minus"></i>
+                                                </button>
                                             </div>
-                                            <input type="text" class="form-control" value="1">
+
+                                            <input type="text" id="product_qty{{ item.product.id }}"
+                                                class="form-control" value="{{ item.quantity }}">
                                             <div class="input-group-append">
-                                                <button class="btn btn-light" type="button" id="button-minus"> <i
-                                                        class="fa fa-plus"></i> </button>
+                                                <button class="btn btn-light update-cart"
+                                                    data-txtQty="product_qty{{ item.product.id }}"
+                                                    data-itemStock="{{ item.product.stock }}" data-btnType="increment"
+                                                    data-product_id="{{ item.product.id }}" type="button"> <i
+                                                        class="fa fa-plus"></i>
+                                                </button>
+
+
                                             </div>
-                                        </div> <!-- input-group.// -->
+                                        </div>  <!-- input-group.// -->
                                     </div> <!-- col.// -->
                                 </td>
                                 <td>
                                     <div class="price-wrap">
-                                        <var class="price">$1156.00</var>
-                                        <small class="text-muted"> $315.20 each </small>
+                                        <var class="price">Rs {{item.product.price}}</var>
+                                        <!-- <small class="text-muted"> $315.20 each </small> -->
                                     </div> <!-- price-wrap .// -->
                                 </td>
                                 <td class="text-right">
                                     <a href="" class="btn btn-danger"> Remove</a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <figure class="itemside align-items-center">
-                                        <div class="aside"><img src="{% static './images/items/10.jpg' %}" class="img-sm"></div>
-                                        <figcaption class="info">
-                                            <a href="#" class="title text-dark">ADATA Premier ONE microSDXC</a>
-                                            <p class="text-muted small">Size: 256 GB <br> Brand: ADATA </p>
-                                        </figcaption>
-                                    </figure>
-                                </td>
-                                <td>
-                                    <!-- col.// -->
-                                    <div class="col">
-                                        <div class="input-group input-spinner">
-                                            <div class="input-group-prepend">
-                                                <button class="btn btn-light" type="button" id="button-plus"> <i
-                                                        class="fa fa-minus"></i> </button>
-                                            </div>
-                                            <input type="text" class="form-control" value="1">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-light" type="button" id="button-minus"> <i
-                                                        class="fa fa-plus"></i> </button>
-                                            </div>
-                                        </div> <!-- input-group.// -->
-                                    </div> <!-- col.// -->
-                                </td>
-                                <td>
-                                    <div class="price-wrap">
-                                        <var class="price">$149.97</var>
-                                        <small class="text-muted"> $75.00 each </small>
-                                    </div> <!-- price-wrap .// -->
-                                </td>
-                                <td class="text-right">
-                                    <a href="" class="btn btn-danger"> Remove</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <figure class="itemside align-items-center">
-                                        <div class="aside"><img src="{% static './images/items/9.jpg' %}" class="img-sm"></div>
-                                        <figcaption class="info">
-                                            <a href="#" class="title text-dark">Logitec headset for gaming</a>
-                                            <p class="small text-muted">Version: CUH-ZCT2E <br> Brand: Sony</p>
-                                        </figcaption>
-                                    </figure>
-                                </td>
-                                <td>
-                                    <!-- col.// -->
-                                    <div class="col">
-                                        <div class="input-group input-spinner">
-                                            <div class="input-group-prepend">
-                                                <button class="btn btn-light" type="button" id="button-plus"> <i
-                                                        class="fa fa-minus"></i> </button>
-                                            </div>
-                                            <input type="text" class="form-control" value="1">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-light" type="button" id="button-minus"> <i
-                                                        class="fa fa-plus"></i> </button>
-                                            </div>
-                                        </div> <!-- input-group.// -->
-                                    </div> <!-- col.// -->
-                                </td>
-                                <td>
-                                    <div class="price-wrap">
-                                        <var class="price">$98.00</var>
-                                        <small class="text-muted"> $578.00 each</small>
-                                    </div> <!-- price-wrap .// -->
-                                </td>
-                                <td class="text-right">
-                                    <a href="" class="btn btn-danger"> Remove</a>
-                                </td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div> <!-- card.// -->
@@ -139,7 +81,7 @@
                     <div class="card-body">
                         <dl class="dlist-align">
                             <dt>Total price:</dt>
-                            <dd class="text-right">$69.97</dd>
+                            <dd class="text-right" id="total">Rs{{ grand_total }}</dd>
                         </dl>
                         <dl class="dlist-align">
                             <dt>Tax:</dt>
@@ -147,7 +89,7 @@
                         </dl>
                         <dl class="dlist-align">
                             <dt>Total:</dt>
-                            <dd class="text-right text-dark b"><strong>$59.97</strong></dd>
+                            <dd class="text-right text-dark b"><strong id="grand_total">Rs {{ grand_total }}</strong></dd>
                         </dl>
                         <hr>
                         <p class="text-center mb-3">
@@ -166,6 +108,77 @@
 
     </div> <!-- container .//  -->
 </section>
-<!-- ==============
+<!-- ============== -->
+
+<script>
+    var btnStatus = ''
+    $('.update-cart').click(function () {
+
+
+        let btnType = $(this).attr('data-btnType')
+        let selectedItemTextId = $(this).attr('data-txtQty')
+        let selectedTxt = document.getElementById(selectedItemTextId)
+        let currentTxtValue = parseInt(selectedTxt.value)
+        let currentItemStock = $(this).attr('data-itemStock')
+        let selectedProductId = $(this).attr('data-product_id')
+
+
+        if (btnType == 'increment') {
+            btnStatus = 'increment'
+            if (currentTxtValue < currentItemStock) {
+                var incrementedValue = currentTxtValue + 1
+                selectedTxt.value = incrementedValue
+            }
+
+        }
+
+        if (btnType == 'decrement') {
+            btnStatus = 'decrement'
+            if (currentTxtValue > 0) {
+                var decrementedValue = currentTxtValue - 1
+
+
+                selectedTxt.value = decrementedValue
+
+            }
+
+
+        }
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRFToken": '{{ csrf_token }}'
+            }
+        })
+
+
+        $.ajax({
+            url: "{% url 'customer:update_cart' %}",
+            method: 'POST',
+            data: {
+                id: selectedProductId,
+                qty: selectedTxt.value
+
+            },
+            success: function (response) {
+                 console.log(response)
+                let grandTotal = response.grand_total
+                    console.log(grandTotal)
+                
+                $('#total').html(grandTotal)
+                $('#grand_total').html(grandTotal + 10)
+
+
+
+            }
+        })
+
+
+
+    })
+
+</script>
+
+
 
 {% endblock %}

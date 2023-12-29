@@ -1,4 +1,5 @@
 from django.db import models
+from seller.models import Product
 
 # Create your models here.
 
@@ -14,3 +15,13 @@ class Customer(models.Model):
 
     class Meta:
         db_table = 'customer_tb'
+
+class Cart(models.Model):
+    customer = models.ForeignKey(Customer, on_delete = models.CASCADE)
+    product = models.ForeignKey(Product, on_delete = models.CASCADE)
+    quantity = models.IntegerField(default = 1)
+    price = models.FloatField()
+
+
+    class Meta:
+        db_table = 'cart_tb'
