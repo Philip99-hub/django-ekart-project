@@ -1,11 +1,18 @@
 from django.shortcuts import render,redirect,reverse
-from .models import Customer,Cart
+from .models import Customer,Cart,Order,OrderItem
 from seller.models import Seller,Product
 from django.db.models import Q,F
 from django.shortcuts import get_object_or_404   
 from django.http import JsonResponse
+from django.conf import settings
+from random import randint
+import razorpay
+from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.db.models import Count,ExpressionWrapper,FloatField
+from datetime import date,datetime
+from django.template.loader import render_to_string
 # Create your views here.
-
 
 def customer_home(request):
     products=Product.objects.all()
@@ -74,10 +81,11 @@ def product_detail(request,product_id):
 
 
 def cart(request, current_view):
+    cart_items = Cart.objects.filter(customer = request.session['customer'])
+
 
     if 'customer' in request.session:
         print('*********')
-        cart_items = Cart.objects.filter(customer = request.session['customer'])
         grand_total = 0
         customer = request.session['customer']
         disable_checkout = ''
@@ -97,14 +105,13 @@ def cart(request, current_view):
                 print(item.product.product_name,'not available')
 
         
-        context = {
-            'cart_items': cart_items, 
-            'disable_checkout': disable_checkout, 
-            'grand_total': grand_total,
-            'total_items': cart_items.count(),
-            
-            }    
-            
+    context = {
+        'cart_items': cart_items, 
+        'disable_checkout': disable_checkout, 
+        'grand_total': grand_total,
+        'total_items': cart_items.count(),
+        
+        }           
         
    
     return render(request, 'customer/cart.html',context)
@@ -126,6 +133,106 @@ def update_cart(request):
     
     # item_price = cart.product.price
     return JsonResponse({'status': 'Quantity updated', 'grand_total': grand_total})
+
+
+
+def order_product(request):
+    cart = Cart.objects.filter(customer = request.session['customer']).annotate(grand_total = F('quantity') * F('product__price') )
+
+    customer = request.session['customer']
+    grand_total = 0
+    for item in cart:
+       grand_total += item.grand_total
+    
+    order_amount = grand_total
+    order_currency = 'INR'
+    order_receipt ='order_rcptid_11'
+    notes = {'shipping address':'bommanahalli,bangalore'} 
+    order_no = 'OD-Ekart-' + str(randint(1111111111,9999999999))
+
+    client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY ,settings.RAZORPAY_API_SECRET))
+    payment = client.order.create({
+            'amount': order_amount * 100,
+            'currency':order_currency,
+            'receipt':order_receipt,
+            'notes':notes,
+             
+        })
+    
+    order = Order(customer_id = customer, order_id = payment['id'], total_amount = grand_total, order_no = order_no )
+    order.save()
+    print(payment)
+    return JsonResponse({'payment': payment})
+
+
+
+@csrf_exempt
+def update_payment(request):
+    
+    if request.method == 'GET':
+        return redirect('customer:customer_home')
+
+    order_id = request.POST['razorpay_order_id']
+    payment_id = request.POST['razorpay_payment_id']
+    signature = request.POST['razorpay_signature']
+    client = razorpay.Client(auth = (settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+    params_dict = {
+            "razorpay_order_id": order_id,
+            "razorpay_payment_id": payment_id,
+            "razorpay_signature": signature
+        }
+    signature_valid = client.utility.verify_payment_signature(params_dict)
+    if signature_valid:
+    
+        order_details = Order.objects.get(order_id = order_id)
+        order_details.payment_status = True
+        order_details.payment_id = payment_id
+        order_details.signature_id = signature
+       
+        order_details.order_status = 'order placed on ' + str(date.today())
+        cart = Cart.objects.filter(customer = order_details.customer)
+
+        for item in cart:
+            order_item = OrderItem(order_id = order_details.id, product_id = item.product.id, quantity = item.quantity, price = item.product.price )
+            order_item.save()
+            selected_qty = item.quantity
+            selected_product = Product.objects.get(id = item.product.id)
+            selected_product.stock -= selected_qty
+            selected_product.save()
+            
+
+   
+        order_details.save()
+        cart.delete()
+
+        customer_name = request.session['customer_name']
+        order_number =  order_details.order_no
+        current_year = datetime.now().year
+        
+        subject = "Order Confirmation"
+        from_email = settings.EMAIL_HOST_USER
+
+        to_email = ['sunnyashish232@gmail.com']
+
+        
+        
+        html_content = render_to_string('customer/invoice.html', {
+        'customer_name': customer_name,
+        'order_no': order_number,
+        'order_date': order_details.created_at,
+        'current_year': current_year,
+        
+        'grand_total': order_details.total_amount
+        
+        })
+            
+        msg = EmailMultiAlternatives(subject, html_content, from_email, to_email)
+        msg.attach_alternative(html_content, "text/html")
+
+ 
+        msg.send()
+    
+    return render(request, 'customer/order_complete.html',  )
 
 
 
@@ -260,3 +367,6 @@ def forgot_password_customer(request):
 
 def forgot_password_seller(request):
     return render(request, 'customer/forgot_password_seller.html')
+
+def test(request):
+    return render(request, 'customer/test.html')

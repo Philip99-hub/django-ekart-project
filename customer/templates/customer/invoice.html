@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+</head>
+
+<body>
+    <div
+        style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd;">
+        <h1 style="color: #007bff; margin-top: 0; text-align: center;">Order Confirmation</h1>
+        <p>Dear {{ customer_name | title }},</p>
+        <p>Thank you for your order!</p>
+        <p>Your order with <span style="color: blueviolet;"><b>{{ order_no }}</b></span> has been received and will be processed shortly.</p>
+        <h2>Order Details</h2>
+        <table>
+            <tr>
+                <td>
+                    Order Number:
+                </td>
+                <td>
+                    {{ order_no }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Order Date:
+                </td>
+                <td>
+                    {{ order_date }}
+                </td>
+            </tr>
+
+            <tr>
+                <td style="vertical-align: top;">
+                    Shipping Address :
+                </td>
+               
+            </tr>
+            <tr>
+                <td>
+                    Total Amount:
+                </td>
+                <td>
+                    Rs <b>{{ grand_total }}</b>
+                </td>
+            </tr>
+        </table>
+
+        <p>For any queries related to your order, please contact our customer support.</p>
+        <p>Thank you for shopping with us!</p>
+        <hr style="border: none; border-top: 1px solid #ddd;">
+        <p style="text-align: center; color: #888; margin-top: 20px;">&copy; {{ current_year }} EKart Store. All rights
+            reserved.</p>
+    </div>
+</body>
+
+</html>

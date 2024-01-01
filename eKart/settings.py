@@ -143,3 +143,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'sunnyashish232@gmail.com'
 EMAIL_HOST_PASSWORD = 'hakf sxtd odan ezaj'
+
+RAZORPAY_API_KEY = 'rzp_test_mFU2QakcmR7iZC'
+RAZORPAY_API_SECRET = 'CYhZdVAseN1lH3yvUgY8Y9Ld'

@@ -18,6 +18,9 @@ urlpatterns = [
    path('customer/login',views.customer_login,name='customer_login'),
    path('forgotPassword/customer',views.forgot_password_customer,name='forgot_password_customer'),
    path('forgotPassword/seller',views.forgot_password_seller,name='forgot_password_seller'),
+   path('customer/products/order', views.order_product, name = 'order_product'),
+   path('update_payment',views.update_payment, name='update_payment') ,
+   path('test',views.test, name='test') 
    
 
 ]

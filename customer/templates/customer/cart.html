@@ -56,7 +56,7 @@
 
 
                                             </div>
-                                        </div>  <!-- input-group.// -->
+                                        </div> <!-- input-group.// -->
                                     </div> <!-- col.// -->
                                 </td>
                                 <td>
@@ -89,13 +89,18 @@
                         </dl>
                         <dl class="dlist-align">
                             <dt>Total:</dt>
-                            <dd class="text-right text-dark b"><strong id="grand_total">Rs {{ grand_total }}</strong></dd>
+                            <dd class="text-right text-dark b"><strong id="grand_total">Rs {{ grand_total }}</strong>
+                            </dd>
                         </dl>
                         <hr>
                         <p class="text-center mb-3">
                             <img src="{% static './images/misc/payments.png' %}" height="26">
                         </p>
-                        <a href="{% url 'customer:order_complete' %}" class="btn btn-primary btn-block"> Checkout </a>
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <button type="button" name="review_cart" id="rzp-button1" class="btn btn-primary btn-block">
+                                Checkout </button>
+                        </form>
                         <a href="{% url 'customer:store' %}" class="btn btn-light btn-block">Continue Shopping</a>
                     </div> <!-- card-body.// -->
                 </div> <!-- card.// -->
@@ -161,10 +166,10 @@
 
             },
             success: function (response) {
-                 console.log(response)
+                console.log(response)
                 let grandTotal = response.grand_total
-                    console.log(grandTotal)
-                
+                console.log(grandTotal)
+
                 $('#total').html(grandTotal)
                 $('#grand_total').html(grandTotal + 10)
 
@@ -175,10 +180,60 @@
 
 
 
-    })
+    })   
 
 </script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        $('#rzp-button1').click(function () {
 
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRFToken": '{{ csrf_token }}'
+                }
+            })
+            $.ajax({
+
+                url: "{% url 'customer:order_product' %}",
+                method: 'POST',
+                success: function (response) {
+                    var options = {
+                        "key": "rzp_test_mFU2QakcmR7iZC",
+                        "amount": response.payment.amount,
+                        "currency": "INR",
+                        "name": "ecommerce",
+                        "order_id": response.payment.id,
+                        "callback_url": " {% url 'customer:update_payment' %}",
+
+                        // "handler": function (response) {
+
+
+                        //     console.log(response);
+
+
+
+                        // },
+                        "theme": {
+                            "color": "#3399cc"
+                        },
+                        "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+                            "name": "Gaurav Kumar", //your customer's name
+                            "email": "gaurav.kumar@example.com",
+                            "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
+                        },
+                    }
+
+                    var rzpl = new Razorpay(options);
+                    rzpl.open()
+
+                }
+
+
+            })
+
+        })
+
+    </script>
 
 
 {% endblock %}
